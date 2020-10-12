@@ -3,6 +3,7 @@ package com.madroid.btautoconnect
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -23,6 +24,8 @@ class MainActivity : AppCompatActivity() {
     var deviceList: List<BluetoothDevice> = ArrayList()
     private val TAG = "MainActivity"
     lateinit var deviceListAdapter: DeviceListAdapter
+    lateinit var sharedPreferences: SharedPreferences
+    var savedDevices: MutableSet<String>? = mutableSetOf()
     lateinit var mBinding: ActivityMainBinding;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +36,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initView() {
+        sharedPreferences = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+        savedDevices = sharedPreferences.getStringSet(SAVED_BT_DEVICES, null);
         deviceListAdapter = DeviceListAdapter(deviceList, this);
         mBinding.rcList.adapter = deviceListAdapter
         mBinding.rcList.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
@@ -41,11 +46,9 @@ class MainActivity : AppCompatActivity() {
     /*Listen for checkbox*/
     fun onCheckedChange(checked: Boolean, address: String) {
         Log.d(TAG, "$checked add --> $address")
-        var sharedPreferences = getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-        var savedDevices = sharedPreferences.getStringSet(SAVED_BT_DEVICES, null);
         Log.d(TAG, savedDevices.toString())
         if (checked) {
-            var set: MutableSet<String> = mutableSetOf()
+            val set: MutableSet<String> = mutableSetOf()
             savedDevices?.let { set.addAll(it) }
             set.add(address)
             val editer = sharedPreferences.edit()
@@ -53,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             editer.putStringSet(SAVED_BT_DEVICES, set).commit()
             Log.d(TAG, sharedPreferences.getStringSet(SAVED_BT_DEVICES, null).toString())
         } else {
-            var set: MutableSet<String> = mutableSetOf()
+            val set: MutableSet<String> = mutableSetOf()
             savedDevices?.asIterable()?.let { set.addAll(it) }
             set.remove(address)
             val editer = sharedPreferences.edit()
@@ -95,9 +98,9 @@ class MainActivity : AppCompatActivity() {
         if (pairedDevices.size > 0) {
             deviceListAdapter.update(pairedDevices.toList())
             for (d in pairedDevices) {
-                var deviceName = d.name;
-                var macAddress = d.address;
-                Log.d("info_devices", "paired device: $deviceName at $macAddress")
+                val deviceName = d.name;
+                val macAddress = d.address;
+                Log.d(TAG, "paired device: $deviceName at $macAddress")
             }
             BTService.startService(this, "Active")
         }
