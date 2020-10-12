@@ -8,6 +8,10 @@
             type="com.madroid.btautoconnect.MainActivity" />
 
         <variable
+            name="enabled"
+            type="java.util.List&lt;String&gt;" />
+
+        <variable
             name="devices"
             type="android.bluetooth.BluetoothDevice" />
     </data>
@@ -40,6 +44,7 @@
             android:id="@+id/ck_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="@{enabled.contains(devices.address)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/v80"
             app:layout_constraintRight_toRightOf="parent"
