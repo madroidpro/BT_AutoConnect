@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">BT AutoConnect</string>
+    <string name="alert">Alert</string>
+    <string name="bt_disabled">Bluetooth is not active! Would you like to enable Bluetooth?</string>
+    <string name="yes">Yes</string>
+    <string name="no">NO</string>
 </resources>

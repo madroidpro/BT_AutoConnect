@@ -5,7 +5,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothDevice.ACTION_ACL_DISCONNECTED
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -14,7 +13,6 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.madroid.btautoconnect.MainActivity
 import com.madroid.btautoconnect.R
 import com.madroid.btautoconnect.receiver.BTBroadcastReceiver
