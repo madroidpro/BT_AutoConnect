@@ -19,7 +19,7 @@ class BTBroadcastReceiver : BroadcastReceiver() {
                 val device: BluetoothDevice? =
                     intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                 Log.d(TAG, "${device?.name} connected")
-                Timer("starting", false).schedule(500) {
+                Timer("starting", false).schedule(1000) {
                     val audioManager: AudioManager =
                         context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
                     val downEvent =

@@ -4,6 +4,7 @@
 
     <uses-feature android:name="android.hardware.bluetooth" />
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -23,10 +24,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".receiver.BTBroadcastReceiver">
+        <receiver
+            android:name=".receiver.BTBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
-                <action android:name="android.bluetooth.BluetoothDevice.ACTION_ACL_CONNECTED" />
+                <action android:name="ACTION_ACL_CONNECTED" />
                 <action android:name="android.bluetooth.BluetoothDevice.ACTION_ACL_DISCONNECTED" />
             </intent-filter>
         </receiver>
