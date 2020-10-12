@@ -20,6 +20,7 @@ import com.madroid.btautoconnect.receiver.BTBroadcastReceiver
 class BTService : Service() {
     companion object {
         val TAG = "BTService"
+        val mReceiver = BTBroadcastReceiver()
         val CHANNEL_ID = "BTService_channel"
         fun startService(context: Context, message: String) {
             val startIntent = Intent(context, BTService::class.java)
@@ -39,10 +40,11 @@ class BTService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "Registered service")
+        removeOldReceivers()
         val intentFilter = IntentFilter()
         intentFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED)
         intentFilter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED)
-        registerReceiver(BTBroadcastReceiver(), intentFilter)
+        registerReceiver(mReceiver, intentFilter)
 
         val input = intent?.getStringExtra("inputExtra")
         createNotificationChannel()
@@ -64,6 +66,7 @@ class BTService : Service() {
         return START_STICKY
     }
 
+
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(CHANNEL_ID, "Foreground Service Channel",
@@ -76,6 +79,15 @@ class BTService : Service() {
 
     override fun onDestroy() {
         Log.d(TAG, "UnRegistered service")
-        unregisterReceiver(BTBroadcastReceiver())
+        removeOldReceivers()
+        super.onDestroy()
+    }
+
+    private fun removeOldReceivers() {
+        try {
+            unregisterReceiver(mReceiver)
+        } catch (e: Exception) {
+            Log.d(TAG, e.message)
+        }
     }
 }

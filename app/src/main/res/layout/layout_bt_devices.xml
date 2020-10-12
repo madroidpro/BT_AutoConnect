@@ -4,6 +4,10 @@
     <data>
 
         <variable
+            name="presenter"
+            type="com.madroid.btautoconnect.MainActivity" />
+
+        <variable
             name="devices"
             type="android.bluetooth.BluetoothDevice" />
     </data>
@@ -32,14 +36,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatCheckBox
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/ck_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/v80"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:onCheckedChangeListener="@{(switch,checked)->presenter.onCheckedChange(checked,devices.address)}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

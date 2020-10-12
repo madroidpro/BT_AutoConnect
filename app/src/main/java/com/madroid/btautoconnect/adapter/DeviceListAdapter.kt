@@ -4,12 +4,13 @@ import android.bluetooth.BluetoothDevice
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.madroid.btautoconnect.MainActivity
 import com.madroid.btautoconnect.databinding.LayoutBtDevicesBinding
 
 /**
  * Created by HND6KOR on 10/12/2020.
  */
-class DeviceListAdapter(private var device: List<BluetoothDevice>) : RecyclerView.Adapter<DeviceListAdapter.DeviceVH>() {
+class DeviceListAdapter(private var device: List<BluetoothDevice>, private val action: MainActivity) : RecyclerView.Adapter<DeviceListAdapter.DeviceVH>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceVH {
         val inflater = LayoutInflater.from(parent.context)
@@ -33,6 +34,7 @@ class DeviceListAdapter(private var device: List<BluetoothDevice>) : RecyclerVie
     inner class DeviceVH(private val binding: LayoutBtDevicesBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(device: BluetoothDevice) {
             binding.devices = device
+            binding.presenter=action
             binding.executePendingBindings()
         }
 
