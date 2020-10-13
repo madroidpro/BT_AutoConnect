@@ -15,7 +15,7 @@ import com.madroid.btautoconnect.databinding.LayoutBtDevicesBinding
  */
 class DeviceListAdapter(private var device: List<BluetoothDevice>, private val action: MainActivity) : RecyclerView.Adapter<DeviceListAdapter.DeviceVH>() {
     var sharedPreferences = action.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-    val savedDevices: MutableSet<String>? = sharedPreferences.getStringSet(CommonUtils.SAVED_BT_DEVICES, null)
+    var savedDevices: MutableSet<String>? = sharedPreferences.getStringSet(CommonUtils.SAVED_BT_DEVICES, null)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceVH {
         val inflater = LayoutInflater.from(parent.context)
         val binding = LayoutBtDevicesBinding.inflate(inflater, parent, false)
@@ -23,6 +23,7 @@ class DeviceListAdapter(private var device: List<BluetoothDevice>, private val a
     }
 
     fun update(updatedDevice: List<BluetoothDevice>) {
+        savedDevices = sharedPreferences.getStringSet(CommonUtils.SAVED_BT_DEVICES, null)
         device = updatedDevice;
         notifyDataSetChanged();
     }
@@ -40,7 +41,10 @@ class DeviceListAdapter(private var device: List<BluetoothDevice>, private val a
             binding.devices = device
             binding.presenter = action
             if (!savedDevices.isNullOrEmpty()) {
-                binding.enabled = savedDevices.toList()
+                val sd = savedDevices
+                if (sd != null) {
+                    binding.enabled = sd.toList()
+                }
             }
             binding.executePendingBindings()
         }

@@ -4,4 +4,6 @@
     <string name="bt_disabled">Bluetooth is not active! Would you like to enable Bluetooth?</string>
     <string name="yes">Yes</string>
     <string name="no">NO</string>
+    <string name="active">Active</string>
+    <string name="inactive">InActive</string>
 </resources>

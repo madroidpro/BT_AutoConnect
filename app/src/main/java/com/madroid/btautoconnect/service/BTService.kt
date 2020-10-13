@@ -4,6 +4,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.content.Intent
@@ -44,6 +45,7 @@ class BTService : Service() {
         val intentFilter = IntentFilter()
         intentFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED)
         intentFilter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED)
+        intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
         registerReceiver(mReceiver, intentFilter)
 
         val input = intent?.getStringExtra("inputExtra")
@@ -57,7 +59,7 @@ class BTService : Service() {
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("BT AutoConnect")
                 .setContentText(input)
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.drawable.ic_stat_name)
                 .setContentIntent(pendingIntent)
                 .build()
 

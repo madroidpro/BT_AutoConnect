@@ -1,5 +1,6 @@
 package com.madroid.btautoconnect.receiver
 
+import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -8,6 +9,7 @@ import android.media.AudioManager
 import android.util.Log
 import android.view.KeyEvent
 import com.madroid.btautoconnect.common.CommonUtils
+import com.madroid.btautoconnect.service.BTService
 import java.util.*
 import kotlin.concurrent.schedule
 
@@ -40,6 +42,13 @@ class BTBroadcastReceiver : BroadcastReceiver() {
                 val device: BluetoothDevice? =
                         intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                 Log.d(TAG, "${device?.name} Disconnected")
+            }
+
+            BluetoothAdapter.ACTION_STATE_CHANGED -> {
+                /*To Kill the app once BT is manually disabled*/
+                if (!BluetoothAdapter.getDefaultAdapter().isEnabled) {
+                    BTService.stopService(context)
+                }
             }
         }
     }

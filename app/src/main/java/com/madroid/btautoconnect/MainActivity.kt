@@ -32,12 +32,14 @@ class MainActivity : AppCompatActivity() {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         mBinding.presenter = this
         initView()
-        startAction();
     }
 
+    override fun onResume() {
+        super.onResume()
+        startAction();
+
+    }
     private fun initView() {
-        sharedPreferences = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-        savedDevices = sharedPreferences.getStringSet(SAVED_BT_DEVICES, null);
         deviceListAdapter = DeviceListAdapter(deviceList, this);
         mBinding.rcList.adapter = deviceListAdapter
         mBinding.rcList.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
@@ -45,6 +47,8 @@ class MainActivity : AppCompatActivity() {
 
     /*Listen for checkbox*/
     fun onCheckedChange(checked: Boolean, address: String) {
+        sharedPreferences = this.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+        savedDevices = sharedPreferences.getStringSet(SAVED_BT_DEVICES, null);
         Log.d(TAG, "$checked add --> $address")
         Log.d(TAG, savedDevices.toString())
         if (checked) {
@@ -52,8 +56,8 @@ class MainActivity : AppCompatActivity() {
             savedDevices?.let { set.addAll(it) }
             set.add(address)
             val editer = sharedPreferences.edit()
-            editer.putStringSet(SAVED_BT_DEVICES, set).apply()
             editer.putStringSet(SAVED_BT_DEVICES, set).commit()
+            editer.putStringSet(SAVED_BT_DEVICES, set).apply()
             Log.d(TAG, sharedPreferences.getStringSet(SAVED_BT_DEVICES, null).toString())
         } else {
             val set: MutableSet<String> = mutableSetOf()
@@ -73,6 +77,8 @@ class MainActivity : AppCompatActivity() {
         if (BluetoothAdapter.getDefaultAdapter().isEnabled) {
             showBtDevices()
         } else {
+            mBinding.tvState.setText(R.string.inactive)
+            mBinding.tvState.setTextColor(getColor(R.color.red))
             mBinding.progressbar.visibility = View.GONE
             val builder = AlertDialog.Builder(this)
             builder.setTitle(R.string.alert)
@@ -93,6 +99,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showBtDevices() {
+        mBinding.tvState.setText(R.string.active)
+        mBinding.tvState.setTextColor(getColor(R.color.green))
         mBinding.progressbar.visibility = View.GONE
         val pairedDevices = BluetoothAdapter.getDefaultAdapter().bondedDevices;
         if (pairedDevices.size > 0) {
@@ -108,6 +116,8 @@ class MainActivity : AppCompatActivity() {
 
     /*Stop BT listen action */
     fun stopAction() {
+        mBinding.tvState.setText(R.string.inactive)
+        mBinding.tvState.setTextColor(getColor(R.color.red))
         BTService.stopService(this)
     }
 }
