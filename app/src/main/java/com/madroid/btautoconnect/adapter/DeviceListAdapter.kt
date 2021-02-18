@@ -40,6 +40,13 @@ class DeviceListAdapter(private var device: List<BluetoothDevice>, private val a
         fun bind(device: BluetoothDevice) {
             binding.devices = device
             binding.presenter = action
+            // To Enable Random color list
+            /*val rnd = Random()
+            val min = 10
+            val max = 150
+            val bodyColor = Color.argb(255, rnd.nextInt(max - min) + max, rnd.nextInt(max - min) + max, rnd.nextInt(max - min) + max)
+            binding.listBody.setCardBackgroundColor(bodyColor)*/
+            //End
             if (!savedDevices.isNullOrEmpty()) {
                 val sd = savedDevices
                 if (sd != null) {
